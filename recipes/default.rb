@@ -24,18 +24,32 @@ execute "Installing RVM and Ruby" do
   not_if { File.directory? "/usr/local/rvm" }
 end
 
-# TODO Figure out how to configure Passenger Enterprise
+# Check for if we are installing Passenger Enterprise
+passenger_enterprise = !!node['passenger-nginx']['passenger']['enterprise_download_token']
 
-# Install Passenger
-bash "Installing Passenger" do
-  code <<-EOF
-  source #{node['passenger-nginx']['rvm']['rvm_shell']}
-  gem install passenger -v #{node['passenger-nginx']['passenger']['version']}
-  EOF
-  user "root"
+if passenger_enterprise
+  bash "Installing Passenger Enterprise Edition" do
+    code <<-EOF
+    source #{node['passenger-nginx']['rvm']['rvm_shell']}
+    gem install --source https://download:#{node['passenger-nginx']['passenger']['enterprise_download_token']}@www.phusionpassenger.com/enterprise_gems/ passenger-enterprise-server -v #{node['passenger-nginx']['passenger']['version']}
+    EOF
+    user "root"
 
-  regex = Regexp.escape("passenger (#{node['passenger-nginx']['passenger']['version']})")
-  not_if { `bash -c "source #{node['passenger-nginx']['rvm']['rvm_shell']} && gem list"`.lines.grep(/^#{regex}/).count > 0 }
+    regex = Regexp.escape("passenger-enterprise-server (#{node['passenger-nginx']['passenger']['version']})")
+    not_if { `bash -c "source #{node['passenger-nginx']['rvm']['rvm_shell']} && gem list"`.lines.grep(/^#{regex}/).count > 0 }
+  end
+else
+  # Install Passenger open source
+  bash "Installing Passenger Open Source Edition" do
+    code <<-EOF
+    source #{node['passenger-nginx']['rvm']['rvm_shell']}
+    gem install passenger -v #{node['passenger-nginx']['passenger']['version']}
+    EOF
+    user "root"
+
+    regex = Regexp.escape("passenger (#{node['passenger-nginx']['passenger']['version']})")
+    not_if { `bash -c "source #{node['passenger-nginx']['rvm']['rvm_shell']} && gem list"`.lines.grep(/^#{regex}/).count > 0 }
+  end
 end
 
 bash "Installing passenger nginx module and nginx from source" do
@@ -48,12 +62,18 @@ bash "Installing passenger nginx module and nginx from source" do
 end
 
 # Create the config
+if passenger_enterprise
+  passenger_root = "/usr/local/rvm/gems/ruby-#{node['passenger-nginx']['ruby_version']}/gems/passenger-enterprise-server-#{node['passenger-nginx']['passenger']['version']}"
+else
+  passenger_root = "/usr/local/rvm/gems/ruby-#{node['passenger-nginx']['ruby_version']}/gems/passenger-#{node['passenger-nginx']['passenger']['version']}"
+end
+
 template "/opt/nginx/conf/nginx.conf" do
   source "nginx.conf.erb"
   variables({
     :ruby_version => node['passenger-nginx']['ruby_version'],
-    :deploy_user => "www-data",
     :rvm => node['rvm'],
+    :passenger_root => passenger_root,
     :passenger => node['passenger-nginx']['passenger'],
     :nginx => node['passenger-nginx']['nginx']
   })
@@ -91,7 +111,6 @@ service 'nginx' do
 end
 
 # Add any applications that we need
-# TODO SSL sites and certificates
 node['passenger-nginx']['apps'].each do |app|
   # Create the conf
   template "/opt/nginx/conf/sites-available/#{app[:name]}" do
@@ -99,9 +118,12 @@ node['passenger-nginx']['apps'].each do |app|
     mode 0744
     action :create
     variables(
-      listen: app[:listen] || 80,
-      server_name: app[:server_name] || "localhost",
-      root: app[:root] || "/opt/nginx/html"
+      listen: app['listen'] || 80,
+      server_name: app['server_name'] || "localhost",
+      root: app['root'] || "/opt/nginx/html",
+      ssl_certificate: app['ssl_certificate'] || nil,
+      ssl_certificate_key: app['ssl_certificate_key'] || nil,
+      redirect_http_https: app['redirect_http_https'] || false
     )
   end
 

@@ -1,4 +1,4 @@
-user  <%= @deploy_user %>;
+user  <%= @nginx['user'] %>;
 worker_processes  <%= @nginx['worker_processes'] %>;
 
 error_log   logs/error.log;
@@ -9,7 +9,7 @@ events {
 }
 
 http {
-  passenger_root /usr/local/rvm/gems/ruby-<%= @ruby_version %>/gems/passenger-<%= @passenger['version'] %>;
+  passenger_root <%= @passenger_root %>;
   passenger_ruby /usr/local/rvm/rubies/ruby-<%= @ruby_version %>/bin/ruby;
   passenger_max_pool_size <%= @passenger['max_pool_size'] %>;
   passenger_min_instances <%= @passenger['min_instances'] %>;

@@ -8,4 +8,34 @@ server {
 
   client_max_body_size 5m;
   client_body_buffer_size 128k;
+
+  <% if @ssl_certificate %>
+  ssl                  on;
+  ssl_certificate      <%= @ssl_certificate %>;
+  ssl_certificate_key  <%= @ssl_certificate_key %>;
+
+  ssl_session_timeout  5m;
+
+  ssl_protocols  SSLv2 SSLv3 TLSv1;
+  ssl_ciphers  HIGH:!aNULL:!MD5;
+  ssl_prefer_server_ciphers   on;
+  <% end %>
+
+  # Maintenance Page
+  if (-f $document_root/system/maintenance.html) {
+      return 503;
+  }
+  error_page 503 @maintenance;
+  location @maintenance {
+      rewrite  ^(.*)$  /system/maintenance.html last;
+      break;
+  }
 }
+
+<% if @redirect_http_https %>
+server {
+  listen 80;
+  server_name <%= @server_name %>;
+  rewrite ^(.*) https://$host$1 permanent;
+}
+<% end %>
