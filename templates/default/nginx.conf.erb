@@ -1,0 +1,37 @@
+user  <%= @deploy_user %>;
+worker_processes  <%= @nginx['worker_processes'] %>;
+
+error_log   logs/error.log;
+pid        logs/nginx.pid;
+
+events {
+  worker_connections  1024;
+}
+
+http {
+  passenger_root /usr/local/rvm/gems/ruby-<%= @ruby_version %>/gems/passenger-<%= @passenger['version'] %>;
+  passenger_ruby /usr/local/rvm/rubies/ruby-<%= @ruby_version %>/bin/ruby;
+  passenger_max_pool_size <%= @passenger['max_pool_size'] %>;
+  passenger_min_instances <%= @passenger['min_instances'] %>;
+  passenger_pool_idle_time <%= @passenger['pool_idle_time'] %>;
+  passenger_max_instances_per_app <%= @passenger['max_instances_per_app'] %>;
+
+  include       mime.types;
+  default_type  application/octet-stream;
+
+  access_log  logs/access.log;
+
+  sendfile        on;
+  #tcp_nopush     on;
+
+  keepalive_timeout  65;
+
+  #gzip  on;
+
+  # Include virtual host configs
+  include sites-enabled/*;
+}
+
+<% @passenger['pre_start'].each do |url| %>
+  passenger_pre_start <%= url %>;
+<% end %>
