@@ -12,14 +12,18 @@ For the impatient:
 
 ### 1. Install Knife Solo
 
-`gem install knife-solo`
+```bash
+gem install knife-solo
+```
 
 Note: Please read http://matschaffer.github.io/knife-solo/ for more info about Knife Solo.
 
 
 ### 2. Prepare a new chef/knife solo project
 
-`knife solo init <my-project-name>`
+```bash
+knife solo init <my-project-name>
+```
 
 chdir into your new folder
 
@@ -28,7 +32,7 @@ chdir into your new folder
 Add the following line to the file `Berksfile`:
 
 
-```
+```ruby
 cookbook "passenger-nginx", git: "https://github.com/ballistiq/passenger-nginx.git"
 ```
 
@@ -44,7 +48,7 @@ In our example, we'll use vagrant running on `localhost`. The name of the json f
 So we would create a file `/nodes/localhost.json`:
 
 
-```
+```json
 {
   "run_list": [
     "recipe[passenger-nginx]"
