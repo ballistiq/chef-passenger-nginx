@@ -6,6 +6,91 @@ Chef recipe for provisioning Ruby (RVM), Passenger, Nginx and Ruby applications 
 
 * Ubuntu
 
+## Quick Start Guide
+
+For the impatient:
+
+### 1. Install Knife Solo
+
+`gem install knife-solo`
+
+### 2. Prepare a new chef/knife solo project
+
+`knife solo init <my-project-name>`
+
+chdir into your new folder
+
+### 3. Add the passenger-nginx cookbook
+
+Add the following line to the file `Berksfile`:
+
+
+```
+cookbook "passenger-nginx", git: "https://github.com/ballistiq/passenger-nginx.git"
+
+```
+
+Run `berks install`
+
+Note: Please refer to http://berkshelf.com/ to read more about using Berkshelf to manage cookbooks.
+
+
+### 4. Add and configure the node
+
+In our example, we'll use vagrant running on `localhost`. The name of the json file should correspond to your hostname. E.g. if you are deploying to server1.ballistiq.com, it should be `server1.ballistiq.com.json`.
+
+So we would create a file `/nodes/localhost.json`:
+
+
+```
+{
+  "run_list": [
+    "recipe[passenger-nginx]"
+  ],
+
+  "passenger-nginx": {
+    "ruby_version": "2.1.0",
+    "passenger": {
+      "version": "4.0.53"
+    },
+    "apps": [
+      {
+        "name": "my-application",
+        "server_name": "example.com www.example.com",
+        "listen": 80,
+        "root": "/var/www/my-application"
+      }
+    ]
+  }
+}
+```
+
+### 5. Prepare the server
+
+We use `knife solo` to prepare and cook the server. Alter the following command to use your username, server host and port.
+
+Preparation copies Chef to the server.
+
+```
+knife solo prepare vagrant@localhost -p 2222
+```
+
+Note: Please read http://matschaffer.github.io/knife-solo/ for more info about Knife Solo.
+
+
+### 6. Cook the server
+
+Cooking actually runs your recipes on the server.
+
+```
+knife solo cook vagrant@localhost -p 2222
+```
+
+Once this is done, it should have installed RVM, Ruby, Passenger, Nginx and configured an application for you.
+
+Now you can run your Capistrano scripts to deploy to the server and off you go.
+
+
 ## Important Attributes
 
 <table>
@@ -227,3 +312,13 @@ Include `passenger-nginx` in your node's `run_list`:
 ## License and Authors
 
 Author:: Leonard Teo (<leonard@ballistiq.com>)
+
+This is licensed under the MIT license. Enjoy!
+
+Copyright (C) 2014 Ballistiq Digital, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

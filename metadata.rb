@@ -1,9 +1,9 @@
 name             'passenger-nginx'
 maintainer       'Leonard Teo'
 maintainer_email 'leonard@ballistiq.com'
-license          'All rights reserved'
+license          'MIT'
 description      'Installs/Configures Passenger with Nginx'
-long_description 'Installs/Configures Passenger with Nginx'
-version          '0.1.0'
+long_description 'Installs/Configures RVM, Ruby, Phusion Passenger (open source and Enterprise editions) with Nginx'
+version          '0.9.0'
 
 supports 'ubuntu'
