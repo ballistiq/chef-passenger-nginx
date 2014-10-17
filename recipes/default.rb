@@ -29,18 +29,18 @@ end
 # Install Passenger
 bash "Installing Passenger" do
   code <<-EOF
-  source #{node['passenger-nginx']['rvm']['rvm-shell']}
+  source #{node['passenger-nginx']['rvm']['rvm_shell']}
   gem install passenger -v #{node['passenger-nginx']['passenger']['version']}
   EOF
   user "root"
 
   regex = Regexp.escape("passenger (#{node['passenger-nginx']['passenger']['version']})")
-  not_if { `bash -c "source #{node['passenger-nginx']['rvm']['rvm-shell']} && gem list"`.lines.grep(/^#{regex}/).count > 0 }
+  not_if { `bash -c "source #{node['passenger-nginx']['rvm']['rvm_shell']} && gem list"`.lines.grep(/^#{regex}/).count > 0 }
 end
 
 bash "Installing passenger nginx module and nginx from source" do
   code <<-EOF
-  source #{node['passenger-nginx']['rvm']['rvm-shell']}
+  source #{node['passenger-nginx']['rvm']['rvm_shell']}
   passenger-install-nginx-module --auto --prefix=/opt/nginx --auto-download
   EOF
   user "root"
