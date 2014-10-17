@@ -1,6 +1,6 @@
 # Chef passenger-nginx Cookbook
 
-Chef cookbook for provisioning Ruby (RVM), Passenger, Nginx and Ruby applications to serve. 
+Chef cookbook for provisioning Ruby (RVM), Passenger (Open Source and Enterprise editions) and Nginx.
 
 ## Supported Platforms
 
