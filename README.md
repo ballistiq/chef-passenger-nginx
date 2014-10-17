@@ -14,6 +14,9 @@ For the impatient:
 
 `gem install knife-solo`
 
+Note: Please read http://matschaffer.github.io/knife-solo/ for more info about Knife Solo.
+
+
 ### 2. Prepare a new chef/knife solo project
 
 `knife solo init <my-project-name>`
@@ -27,7 +30,6 @@ Add the following line to the file `Berksfile`:
 
 ```
 cookbook "passenger-nginx", git: "https://github.com/ballistiq/passenger-nginx.git"
-
 ```
 
 Run `berks install`
@@ -75,8 +77,6 @@ Preparation copies Chef to the server.
 knife solo prepare vagrant@localhost -p 2222
 ```
 
-Note: Please read http://matschaffer.github.io/knife-solo/ for more info about Knife Solo.
-
 
 ### 6. Cook the server
 
@@ -89,6 +89,11 @@ knife solo cook vagrant@localhost -p 2222
 Once this is done, it should have installed RVM, Ruby, Passenger, Nginx and configured an application for you.
 
 Now you can run your Capistrano scripts to deploy to the server and off you go.
+
+
+## Need to make changes to the cookbook?
+
+If you are configuring an application that has some funky requirements and need to change some stuff in this cookbook, clone the repository and copy it to `site-cookbooks`. Remove it from the Berksfile as you are now using the version in your project. Make any edits and enjoy. 
 
 
 ## Important Attributes
