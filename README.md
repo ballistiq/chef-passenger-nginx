@@ -104,7 +104,7 @@ Include `passenger-nginx` in your node's `run_list`:
   "passenger-nginx": {
     "ruby_version": "2.1.0",
     "passenger": {
-      version: "4.0.53"
+      "version": "4.0.53"
     },
     "apps": [
       {
