@@ -22,55 +22,84 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+if platform?("ubuntu")
+  execute "apt-get update" do
+    command "apt-get update"
+    user "root"
+  end
 
-execute "apt-get update" do
-  command "apt-get update"
-  user "root"
+  # Install every conceivable thing we need for this to compile
+  %w(git build-essential zlib1g-dev libssl-dev libreadline-dev libyaml-dev libcurl4-openssl-dev curl git-core python-software-properties libsqlite3-dev libmysql++-dev).each do |pkg|
+    apt_package pkg  
+  end
+
+elsif platform?("centos")
+  execute "yum update" do
+    command "yum update -y"
+    user "root"
+  end
+
+  execute 'yum groupinstall "Development Tools"' do
+    command 'yum groupinstall "Development Tools" -y'
+    user "root"
+  end
+
+  %w(libcurl-devel openssl-devel libyaml-devel libffi-devel readline-devel).each do |pkg|
+    yum_package pkg
+  end
 end
 
-# Install every conceivable thing we need for this to compile
-%w(git build-essential zlib1g-dev libssl-dev libreadline-dev libyaml-dev libcurl4-openssl-dev curl git-core python-software-properties libsqlite3-dev libmysql++-dev).each do |pkg|
-  apt_package pkg  
+include_recipe 'ruby_build'
+ruby_build_ruby "2.1.0" do
+  prefix_path '/usr/local'
+  action :install
 end
 
-# Install Ruby - system wide RVM
-execute "Installing RVM and Ruby" do
-  command "curl -L https://get.rvm.io | bash -s stable --rails --autolibs=enabled --ruby=ruby-#{node['passenger-nginx']['ruby_version']}"
-  user "root"
-  not_if { File.directory? "/usr/local/rvm" }
-end
+# Create User
+# user_account 'deployer' do
+#   comment   'Deployer Account'
+#   # openssl passwd -1 -salt foo password
+#   password '$1$foo$f3WvPmEkMbGE6/KmD1hyZ1'
+# end
 
-# Check for if we are installing Passenger Enterprise
+# Install Ruby
+# execute "Installing RVM and Ruby" do
+#   # command "curl -L https://get.rvm.io | bash -s stable --autolibs=enabled --ruby=ruby-#{node['passenger-nginx']['ruby_version']}"
+#   command "curl -L https://get.rvm.io | bash -s stable --ruby=ruby-#{node['passenger-nginx']['ruby_version']}"
+#   user "deployer"
+#   cwd "/home/deployer"
+#   # user "root"
+#   # not_if { File.directory? "/usr/local/rvm" }
+# end
+
+# # Check for if we are installing Passenger Enterprise
 passenger_enterprise = !!node['passenger-nginx']['passenger']['enterprise_download_token']
 
 if passenger_enterprise
   bash "Installing Passenger Enterprise Edition" do
     code <<-EOF
-    source #{node['passenger-nginx']['rvm']['rvm_shell']}
     gem install --source https://download:#{node['passenger-nginx']['passenger']['enterprise_download_token']}@www.phusionpassenger.com/enterprise_gems/ passenger-enterprise-server -v #{node['passenger-nginx']['passenger']['version']}
     EOF
     user "root"
 
     regex = Regexp.escape("passenger-enterprise-server (#{node['passenger-nginx']['passenger']['version']})")
-    not_if { `bash -c "source #{node['passenger-nginx']['rvm']['rvm_shell']} && gem list"`.lines.grep(/^#{regex}/).count > 0 }
+    not_if { `bash -c "gem list"`.lines.grep(/^#{regex}/).count > 0 }
   end
 else
   # Install Passenger open source
   bash "Installing Passenger Open Source Edition" do
     code <<-EOF
-    source #{node['passenger-nginx']['rvm']['rvm_shell']}
     gem install passenger -v #{node['passenger-nginx']['passenger']['version']}
     EOF
     user "root"
 
     regex = Regexp.escape("passenger (#{node['passenger-nginx']['passenger']['version']})")
-    not_if { `bash -c "source #{node['passenger-nginx']['rvm']['rvm_shell']} && gem list"`.lines.grep(/^#{regex}/).count > 0 }
+    not_if { `bash -c "gem list"`.lines.grep(/^#{regex}/).count > 0 }
   end
 end
 
 bash "Installing passenger nginx module and nginx from source" do
   code <<-EOF
-  source #{node['passenger-nginx']['rvm']['rvm_shell']}
   passenger-install-nginx-module --auto --prefix=/opt/nginx --auto-download
   EOF
   user "root"
@@ -79,9 +108,9 @@ end
 
 # Create the config
 if passenger_enterprise
-  passenger_root = "/usr/local/rvm/gems/ruby-#{node['passenger-nginx']['ruby_version']}/gems/passenger-enterprise-server-#{node['passenger-nginx']['passenger']['version']}"
+  passenger_root = "/usr/local/lib/ruby/gems/#{node['passenger-nginx']['ruby_version']}/gems/passenger-enterprise-server-#{node['passenger-nginx']['passenger']['version']}"
 else
-  passenger_root = "/usr/local/rvm/gems/ruby-#{node['passenger-nginx']['ruby_version']}/gems/passenger-#{node['passenger-nginx']['passenger']['version']}"
+  passenger_root = "/usr/local/lib/ruby/gems/#{node['passenger-nginx']['ruby_version']}/gems/passenger-#{node['passenger-nginx']['passenger']['version']}"
 end
 
 template "/opt/nginx/conf/nginx.conf" do
