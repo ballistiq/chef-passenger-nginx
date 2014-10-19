@@ -78,23 +78,23 @@ passenger_enterprise = !!node['passenger-nginx']['passenger']['enterprise_downlo
 if passenger_enterprise
   bash "Installing Passenger Enterprise Edition" do
     code <<-EOF
-    gem install --source https://download:#{node['passenger-nginx']['passenger']['enterprise_download_token']}@www.phusionpassenger.com/enterprise_gems/ passenger-enterprise-server -v #{node['passenger-nginx']['passenger']['version']}
+    /usr/local/bin/gem install --source https://download:#{node['passenger-nginx']['passenger']['enterprise_download_token']}@www.phusionpassenger.com/enterprise_gems/ passenger-enterprise-server -v #{node['passenger-nginx']['passenger']['version']}
     EOF
     user "root"
 
     regex = Regexp.escape("passenger-enterprise-server (#{node['passenger-nginx']['passenger']['version']})")
-    not_if { `bash -c "gem list"`.lines.grep(/^#{regex}/).count > 0 }
+    not_if { `bash -c "/usr/local/bin/gem list"`.lines.grep(/^#{regex}/).count > 0 }
   end
 else
   # Install Passenger open source
   bash "Installing Passenger Open Source Edition" do
     code <<-EOF
-    gem install passenger -v #{node['passenger-nginx']['passenger']['version']}
+    /usr/local/bin/gem install passenger -v #{node['passenger-nginx']['passenger']['version']}
     EOF
     user "root"
 
     regex = Regexp.escape("passenger (#{node['passenger-nginx']['passenger']['version']})")
-    not_if { `bash -c "gem list"`.lines.grep(/^#{regex}/).count > 0 }
+    not_if { `bash -c "/usr/local/bin/gem list"`.lines.grep(/^#{regex}/).count > 0 }
   end
 end
 
@@ -125,10 +125,32 @@ template "/opt/nginx/conf/nginx.conf" do
 end
 
 # Install the nginx control script
-cookbook_file "/etc/init.d/nginx" do
-  source "nginx.initd"
-  action :create
-  mode 0755
+if platform?("ubuntu")
+  cookbook_file "/etc/init.d/nginx" do
+    source "nginx.initd.ubuntu"
+    action :create
+    mode 0755
+  end
+elsif platform?("centos")
+  cookbook_file "/etc/init.d/nginx" do
+    source "nginx.initd.centos"
+    action :create
+    mode 0755
+  end
+
+  execute "Reload daemon configs on CentOS" do
+    command "systemctl daemon-reload"
+    user "root"
+  end
+end
+
+# TODO Add to runlevels on Ubuntu
+if platform?("ubuntu")
+elsif platform?("centos")
+  execute "Add Nginx to runlevels" do
+    command "/sbin/chkconfig nginx on"
+    user "root"
+  end
 end
 
 # Add log rotation
