@@ -33,12 +33,37 @@ end
   apt_package pkg  
 end
 
-# Install Ruby - system wide RVM
-execute "Installing RVM and Ruby" do
-  command "curl -L https://get.rvm.io | bash -s stable --rails --autolibs=enabled --ruby=ruby-#{node['passenger-nginx']['ruby_version']}"
+execute "Installing GPG keys so that RVM won't barf on installation" do
+  command "gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3"
   user "root"
-  not_if { File.directory? "/usr/local/rvm" }
+  not_if { File.exists? "/usr/local/rvm/bin/rvm" }
 end
+
+# Install RVM
+execute "Installing RVM and Ruby" do
+  command "curl -L https://get.rvm.io | bash -s stable"
+  user "root"
+  not_if { File.exists? "/usr/local/rvm/bin/rvm" }
+end
+
+# Add deploy user to rvm
+execute "Add deploy user to RVM" do
+  command "usermod -a -G rvm #{node['passenger-nginx']['nginx']['user']}"
+  user "root"
+end
+
+# Install Ruby
+bash "Install Ruby" do
+  code "source /etc/profile.d/rvm.sh && rvm install #{node['passenger-nginx']['ruby_version']}"
+  user "root"
+  not_if { Dir.exists? "/usr/local/rvm/rubies/ruby-#{node['passenger-nginx']['ruby_version']}" }
+end
+
+# Set default Ruby
+bash "Set default Ruby" do
+  code "source /etc/profile.d/rvm.sh && rvm --default use #{node['passenger-nginx']['ruby_version']}"
+end
+
 
 # Check for if we are installing Passenger Enterprise
 passenger_enterprise = !!node['passenger-nginx']['passenger']['enterprise_download_token']

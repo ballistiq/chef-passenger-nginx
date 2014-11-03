@@ -317,6 +317,11 @@ Include `passenger-nginx` in your node's `run_list`:
 ```
 
 
+## Changelog
+
+**3 November 2014 - 0.9.1** - Install GPG keys before attempting to install RVM. New RVM appears to have changed keys which was causing failure on run. Default Ruby is now 2.1.4.
+
+
 
 ## License and Authors
 
