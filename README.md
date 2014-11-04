@@ -64,7 +64,9 @@ So we would create a file `/nodes/localhost.json`:
         "name": "my-application",
         "server_name": "example.com www.example.com",
         "listen": 80,
-        "root": "/var/www/my-application"
+        "root": "/var/www/my-application",
+        "ruby_gemset": "my-application",
+        "app_env": "staging"
       }
     ]
   }
