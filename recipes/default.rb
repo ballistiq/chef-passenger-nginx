@@ -99,7 +99,7 @@ bash "Installing passenger nginx module and nginx from source" do
   passenger-install-nginx-module --auto --prefix=/opt/nginx --auto-download
   EOF
   user "root"
-  not_if { File.directory? "/opt/nginx" }
+  not_if { File.exists? "/opt/nginx/sbin/nginx" }
 end
 
 # Create the config
