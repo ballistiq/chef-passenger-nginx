@@ -165,6 +165,18 @@ If you are configuring an application that has some funky requirements and need 
     <td><tt></tt></td>
   </tr>
   <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['ruby_gemset']</tt></td>
+    <td>String</td>
+    <td>Use a specific gemset for the application.</td>
+    <td><tt></tt></td>
+  </tr>
+  <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['app_env']</tt></td>
+    <td>String</td>
+    <td>Environment to run your app. E.g. 'staging'</td>
+    <td><tt>production</tt></td>
+  </tr>
+  <tr>
     <td><tt>['passenger-nginx']['passenger']['apps'][n]['ssl_certificate']</tt></td>
     <td>String</td>
     <td>Path to SSL certificate: e.g. "/opt/nginx/keys/app.bundle.crt"</td>
@@ -181,6 +193,12 @@ If you are configuring an application that has some funky requirements and need 
     <td>Boolean</td>
     <td>If you want to redirect requests on port 80 to https:// (443) then set this to true.</td>
     <td><tt>false</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['custom_config']</tt></td>
+    <td>String</td>
+    <td>Any additional Nginx configuration that you want for the app.</td>
+    <td><tt></tt></td>
   </tr>
 </table>
 
@@ -246,7 +264,9 @@ Include `passenger-nginx` in your node's `run_list`:
         "name": "my-application",
         "server_name": "example.com www.example.com",
         "listen": 80,
-        "root": "/var/www/my-application"
+        "root": "/var/www/my-application",
+        "ruby_gemset": "my-application",
+        "app_env": "staging"
       }
     ]
   }
@@ -277,7 +297,8 @@ Include `passenger-nginx` in your node's `run_list`:
         "name": "my-application",
         "server_name": "example.com www.example.com",
         "listen": 80,
-        "root": "/var/www/my-application"
+        "root": "/var/www/my-application",
+        "ruby_gemset": "my-application"
       }
     ]
   }
@@ -310,6 +331,7 @@ Include `passenger-nginx` in your node's `run_list`:
         "server_name": "example.com www.example.com",
         "listen": 443,
         "root": "/var/www/my-application",
+        "ruby_gemset": "my-application",
         "ssl_certificate": "/opt/nginx/keys/app.bundle.crt",
         "ssl_certificate_key": "/opt/nginx/keys/app.key",
         "redirect_http_https": true
@@ -321,6 +343,8 @@ Include `passenger-nginx` in your node's `run_list`:
 
 
 ## Changelog
+
+**4 November 2014 - 0.9.2** - Fixed issue with Passenger not starting because Ruby is not running via a wrapper. Added app variables `app_env` to set environment, `ruby_gemset` to set a specific gemset for the application and `custom_config` to allow any additional custom configuration that you want passed into Nginx.
 
 **3 November 2014 - 0.9.1** - Install GPG keys before attempting to install RVM. New RVM appears to have changed keys which was causing failure on run. Default Ruby is now 2.1.4.
 

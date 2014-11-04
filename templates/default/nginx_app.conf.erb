@@ -3,6 +3,16 @@ server {
   server_name <%= @server_name %>;
   root <%= @root %>;
   passenger_enabled on;
+  <% if @ruby_gemset %>
+  passenger_ruby /usr/local/rvm/wrappers/ruby-<%= @ruby_version %>@<%= @ruby_gemset %>/ruby;
+  <% end %>
+  <% if @app_env %>
+  passenger_app_env <%= @app_env %>;
+  <% end %>
+
+  <% if @custom_config %>
+  <%= @custom_config %>
+  <% end %>
 
   index index.html;
 
@@ -16,7 +26,7 @@ server {
 
   ssl_session_timeout  5m;
 
-  ssl_protocols  SSLv2 SSLv3 TLSv1;
+  ssl_protocols  SSLv2 TLSv1;
   ssl_ciphers  HIGH:!aNULL:!MD5;
   ssl_prefer_server_ciphers   on;
   <% end %>
