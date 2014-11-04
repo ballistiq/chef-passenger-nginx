@@ -94,9 +94,6 @@ Once this is done, it should have installed RVM, Ruby, Passenger, Nginx and conf
 
 Now you can run your Capistrano scripts to deploy to the server and off you go.
 
-Note: This Chef recipe will misconfigure the "passenger_ruby" line in /opt/nginx/conf/nginx.conf. To fix this,
-follow the directions in https://www.phusionpassenger.com/documentation/Users%20guide%20Nginx.html#PassengerRuby, section "RVM helper tool", to correctly set "passenger_ruby" to a RVM wrapper.
-
 
 ## Need to make changes to the cookbook?
 
