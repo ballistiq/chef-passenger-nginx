@@ -168,6 +168,12 @@ node['passenger-nginx']['apps'].each do |app|
       ruby_version: node['passenger-nginx']['ruby_version'] || nil,
       ruby_gemset: app['ruby_gemset'] || nil,
       app_env: app['app_env'] || nil,
+      passenger_min_instances: app['passenger_min_instances'] || nil,
+      passenger_max_instances: app['passenger_max_instances'] || nil,
+      passenger_concurrency_model: app['passenger_concurrency_model'] || nil,
+      passenger_thread_count: app['passenger_thread_count'] || nil,
+      access_log: app['access_log'] || nil,
+      error_log: app['error_log'] || nil,
       custom_config: app['custom_config'] || nil,
     )
   end

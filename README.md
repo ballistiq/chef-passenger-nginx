@@ -129,6 +129,7 @@ If you are configuring an application that has some funky requirements and need 
     <td>If using Passenger Enterprise, log in to the customer area and get the download token. This will give the recipe access to download the Enterprise Gem from Phusion directly.</td>
     <td><tt>nil</tt></td>
   </tr>
+
 </table>
 
 ## Attributes for Configuring Applications in Nginx
@@ -175,6 +176,32 @@ If you are configuring an application that has some funky requirements and need 
     <td>Environment to run your app. E.g. 'staging'</td>
     <td><tt>production</tt></td>
   </tr>
+
+  <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['passenger_min_instances']</tt></td>
+    <td>Integer</td>
+    <td>[https://www.phusionpassenger.com/documentation/Users%20guide%20Nginx.html#PassengerMinInstances](https://www.phusionpassenger.com/documentation/Users%20guide%20Nginx.html#PassengerMinInstances)</td>
+    <td><tt>1</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['passenger_max_instances']</tt></td>
+    <td>Integer</td>
+    <td>[https://www.phusionpassenger.com/documentation/Users%20guide%20Nginx.html#PassengerMaxInstances](https://www.phusionpassenger.com/documentation/Users%20guide%20Nginx.html#PassengerMaxInstances)</td>
+    <td><tt>0</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['passenger_concurrency_model']</tt></td>
+    <td>String</td>
+    <td>[https://www.phusionpassenger.com/documentation/Users%20guide%20Nginx.html#PassengerConcurrencyModel](https://www.phusionpassenger.com/documentation/Users%20guide%20Nginx.html#PassengerConcurrencyModel)</td>
+    <td><tt>process</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['passenger_thread_count']</tt></td>
+    <td>Integer</td>
+    <td>[https://www.phusionpassenger.com/documentation/Users%20guide%20Nginx.html#PassengerThreadCount](https://www.phusionpassenger.com/documentation/Users%20guide%20Nginx.html#PassengerThreadCount)</td>
+    <td><tt>1</tt></td>
+  </tr>
+
   <tr>
     <td><tt>['passenger-nginx']['passenger']['apps'][n]['ssl_certificate']</tt></td>
     <td>String</td>
@@ -199,6 +226,19 @@ If you are configuring an application that has some funky requirements and need 
     <td>Any additional Nginx configuration that you want for the app.</td>
     <td><tt></tt></td>
   </tr>
+
+  <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['access_log']</tt></td>
+    <td>String</td>
+    <td>Location for access log</td>
+    <td><tt>nil - defaults to global access log</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['error_log']</tt></td>
+    <td>String</td>
+    <td>Location for error log</td>
+    <td><tt>nil - defaults to global error log</tt></td>
+  </tr>
 </table>
 
 ## Attributes for Tuning
@@ -215,6 +255,20 @@ If you are configuring an application that has some funky requirements and need 
     <td>Number of Nginx worker processes to run</td>
     <td><tt>2</tt></td>
   </tr>
+  <tr>
+    <td><tt>['passenger-nginx']['nginx']['access_log']</tt></td>
+    <td>String</td>
+    <td>Location for access log. "off" to not use this.</td>
+    <td><tt>logs/access.log</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['passenger-nginx']['nginx']['error_log']</tt></td>
+    <td>String</td>
+    <td>Location for error log. "off" to not use this.</td>
+    <td><tt>logs/error.log</tt></td>
+  </tr>
+
+
   <tr>
     <td><tt>['passenger-nginx']['passenger']['max_pool_size']</tt></td>
     <td>Integer</td>

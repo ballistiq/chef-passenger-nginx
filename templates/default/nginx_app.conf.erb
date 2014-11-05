@@ -9,9 +9,28 @@ server {
   <% if @app_env %>
   passenger_app_env <%= @app_env %>;
   <% end %>
+  <% if @passenger_min_instances %>
+  passenger_min_instances <%= @passenger_min_instances %>;
+  <% end %>
+  <% if @passenger_max_instances %>
+  passenger_max_instances <%= @passenger_max_instances %>;
+  <% end %>
+  <% if @passenger_concurrency_model %>
+  passenger_concurrency_model <%= @passenger_concurrency_model %>;
+  <% end %>
+  <% if @passenger_thread_count %>
+  passenger_thread_count <%= @passenger_thread_count %>;
+  <% end %>
 
   <% if @custom_config %>
   <%= @custom_config %>
+  <% end %>
+
+  <% if @access_log %>
+  access_log <%= @access_log %>;
+  <% end %>
+  <% if @error_log %>
+  error_log <%= @error_log %>;
   <% end %>
 
   index index.html;
