@@ -129,13 +129,6 @@ If you are configuring an application that has some funky requirements and need 
     <td>If using Passenger Enterprise, log in to the customer area and get the download token. This will give the recipe access to download the Enterprise Gem from Phusion directly.</td>
     <td><tt>nil</tt></td>
   </tr>
-  <tr>
-    <td><tt>['passenger-nginx']['passenger']['rolling_restarts']</tt></td>
-    <td>String</td>
-    <td>If using Passenger Enterprise, this enables rolling restarts. Can be 'on' or 'off'.</td>
-    <td><tt>off</tt></td>
-  </tr>
-
 </table>
 
 ## Attributes for Configuring Applications in Nginx
@@ -275,6 +268,12 @@ If you are configuring an application that has some funky requirements and need 
   </tr>
 
 
+  <tr>
+    <td><tt>['passenger-nginx']['passenger']['rolling_restarts']</tt></td>
+    <td>String</td>
+    <td>If using Passenger Enterprise, this enables rolling restarts. Can be 'on' or 'off'.</td>
+    <td><tt>off</tt></td>
+  </tr>
   <tr>
     <td><tt>['passenger-nginx']['passenger']['max_pool_size']</tt></td>
     <td>Integer</td>
