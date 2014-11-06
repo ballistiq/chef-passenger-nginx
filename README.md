@@ -129,6 +129,12 @@ If you are configuring an application that has some funky requirements and need 
     <td>If using Passenger Enterprise, log in to the customer area and get the download token. This will give the recipe access to download the Enterprise Gem from Phusion directly.</td>
     <td><tt>nil</tt></td>
   </tr>
+  <tr>
+    <td><tt>['passenger-nginx']['passenger']['rolling_restarts']</tt></td>
+    <td>String</td>
+    <td>If using Passenger Enterprise, this enables rolling restarts. Can be 'on' or 'off'.</td>
+    <td><tt>off</tt></td>
+  </tr>
 
 </table>
 
@@ -396,6 +402,8 @@ Include `passenger-nginx` in your node's `run_list`:
 
 
 ## Changelog
+
+**5 November 2014 - 0.9.3** - Added rolling restarts to Passenger. Recipe now creates gemsets if they are defined.
 
 **4 November 2014 - 0.9.2** - Fixed issue with Passenger not starting because Ruby is not running via a wrapper. Added app variables `app_env` to set environment, `ruby_gemset` to set a specific gemset for the application and `custom_config` to allow any additional custom configuration that you want passed into Nginx.
 

@@ -182,6 +182,18 @@ node['passenger-nginx']['apps'].each do |app|
   link "/opt/nginx/conf/sites-enabled/#{app[:name]}" do
     to "/opt/nginx/conf/sites-available/#{app[:name]}"
   end
+
+  # Create the ruby gemset
+  if node['passenger-nginx']['ruby_version'] && app['ruby_gemset']
+    bash "Create Ruby Gemset" do
+      code <<-EOF
+      source #{node['passenger-nginx']['rvm']['rvm_shell']}
+      rvm ruby-#{node['passenger-nginx']['ruby_version']} do rvm gemset create #{app['ruby_gemset']}
+      EOF
+      user "root"
+      not_if { File.directory? "/usr/local/rvm/gems/ruby-#{node['passenger-nginx']['ruby_version']}@#{app['ruby_gemset']}" }
+    end
+  end
 end
 
 # Restart/start nginx
