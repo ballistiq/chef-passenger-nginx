@@ -14,6 +14,7 @@ default['passenger-nginx']['passenger']['max_pool_size'] = 15
 default['passenger-nginx']['passenger']['min_instances'] = 1
 default['passenger-nginx']['passenger']['pool_idle_time'] = 300
 default['passenger-nginx']['passenger']['max_instances_per_app'] = 0
+default['passenger-nginx']['passenger']['rolling_restarts'] = 'off'
 
 # Passenger Enterprise
 default['passenger-nginx']['passenger']['enterprise_license'] = nil
