@@ -33,7 +33,7 @@ Add the following line to the file `Berksfile`:
 
 
 ```ruby
-cookbook "passenger-nginx", git: "https://github.com/ballistiq/passenger-nginx.git"
+cookbook "passenger-nginx", git: "https://github.com/ballistiq/chef-passenger-nginx.git"
 ```
 
 Run `berks install`
