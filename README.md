@@ -402,6 +402,8 @@ Include `passenger-nginx` in your node's `run_list`:
 
 ## Changelog
 
+**8 November 2014 - 0.9.4** - Fixed bug with rolling restarts directive barfing on open source edition of Passenger (even if it says 'off').
+
 **5 November 2014 - 0.9.3** - Added rolling restarts to Passenger. Recipe now creates gemsets if they are defined.
 
 **4 November 2014 - 0.9.2** - Fixed issue with Passenger not starting because Ruby is not running via a wrapper. Added app variables `app_env` to set environment, `ruby_gemset` to set a specific gemset for the application and `custom_config` to allow any additional custom configuration that you want passed into Nginx.

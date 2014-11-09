@@ -18,7 +18,9 @@ http {
   passenger_min_instances <%= @passenger['min_instances'] %>;
   passenger_pool_idle_time <%= @passenger['pool_idle_time'] %>;
   passenger_max_instances_per_app <%= @passenger['max_instances_per_app'] %>;
+  <% if @passenger['rolling_restarts'] %>
   passenger_rolling_restarts <%= @passenger['rolling_restarts'] %>;
+  <% end %>
 
   include       mime.types;
   default_type  application/octet-stream;
