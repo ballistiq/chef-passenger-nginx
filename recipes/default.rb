@@ -29,7 +29,7 @@ execute "apt-get update" do
 end
 
 # Install basic packages
-%w(git build-essential curl).each do |pkg|
+%w(git build-essential curl libcurl4-openssl-dev).each do |pkg|
   apt_package pkg  
 end
 
