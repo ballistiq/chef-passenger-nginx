@@ -28,8 +28,8 @@ execute "apt-get update" do
   user "root"
 end
 
-# Install every conceivable thing we need for this to compile
-%w(git build-essential zlib1g-dev libssl-dev libreadline-dev libyaml-dev libcurl4-openssl-dev curl git-core python-software-properties libsqlite3-dev libmysql++-dev).each do |pkg|
+# Install basic packages
+%w(git build-essential curl).each do |pkg|
   apt_package pkg  
 end
 

@@ -402,6 +402,8 @@ Include `passenger-nginx` in your node's `run_list`:
 
 ## Changelog
 
+**11 November 2014 - 0.9.5** - Fixed issue with apt eager installing packages. RVM will automatically install required packages.
+
 **8 November 2014 - 0.9.4** - Fixed bug with rolling restarts directive barfing on open source edition of Passenger (even if it says 'off').
 
 **5 November 2014 - 0.9.3** - Added rolling restarts to Passenger. Recipe now creates gemsets if they are defined.
