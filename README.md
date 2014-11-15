@@ -249,6 +249,12 @@ If you are configuring an application that has some funky requirements and need 
     <td><tt>www-data</tt></td>
   </tr>
   <tr>
+    <td><tt>['passenger-nginx']['nginx']['extra_configure_flags']</tt></td>
+    <td>String</td>
+    <td>Compile additional modules. E.g. "--with-http_gzip_static_module"</td>
+    <td><tt></tt></td>
+  </tr>
+  <tr>
     <td><tt>['passenger-nginx']['nginx']['worker_processes']</tt></td>
     <td>Integer</td>
     <td>Number of Nginx worker processes to run</td>
@@ -402,7 +408,9 @@ Include `passenger-nginx` in your node's `run_list`:
 
 ## Changelog
 
-**11 November 2014 - 0.9.6** - dded libcurl4-openssl-dev to apt packages. Required by Passenger...
+**14 November 2014 - 0.9.7** - Added Nginx extra configure flags to attributes.
+
+**11 November 2014 - 0.9.6** - Added libcurl4-openssl-dev to apt packages. Required by Passenger...
 
 **11 November 2014 - 0.9.5** - Fixed issue with apt eager installing packages. RVM will automatically install required packages.
 

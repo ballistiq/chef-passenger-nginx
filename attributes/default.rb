@@ -3,6 +3,7 @@ default['passenger-nginx']['ruby_version'] = "2.1.4"
 default['passenger-nginx']['rvm']['rvm_shell'] = '/etc/profile.d/rvm.sh'
 
 # Nginx
+default['passenger-nginx']['nginx']['extra_configure_flags'] = ""
 default['passenger-nginx']['nginx']['worker_processes'] = 2
 default['passenger-nginx']['nginx']['user'] = 'www-data'
 default['passenger-nginx']['nginx']['access_log'] = 'logs/access.log'
