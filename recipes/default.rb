@@ -96,7 +96,7 @@ end
 bash "Installing passenger nginx module and nginx from source" do
   code <<-EOF
   source #{node['passenger-nginx']['rvm']['rvm_shell']}
-  passenger-install-nginx-module --auto --prefix=/opt/nginx --auto-download --extra-configure-flags="#{node['passenger-nginx']['nginx']['extra_configure_flags']}"
+  passenger-install-nginx-module --auto --prefix=/opt/nginx --auto-download --extra-configure-flags="\"#{node['passenger-nginx']['nginx']['extra_configure_flags']}\""
   EOF
   user "root"
   not_if { File.exists? "/opt/nginx/sbin/nginx" }
