@@ -175,6 +175,8 @@ node['passenger-nginx']['apps'].each do |app|
       access_log: app['access_log'] || nil,
       error_log: app['error_log'] || nil,
       custom_config: app['custom_config'] || nil,
+      client_max_body_size: app['client_max_body_size'] || nil,
+      client_body_buffer_size: app['client_body_buffer_size'] || nil
     )
   end
 

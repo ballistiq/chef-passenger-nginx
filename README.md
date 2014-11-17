@@ -220,6 +220,18 @@ If you are configuring an application that has some funky requirements and need 
     <td><tt>false</tt></td>
   </tr>
   <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['client_body_buffer_size']</tt></td>
+    <td>String</td>
+    <td>See: http://nginx.org/en/docs/http/ngx_http_core_module.html#client_body_buffer_size</td>
+    <td><tt></tt></td>
+  </tr>
+  <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['client_max_body_size']</tt></td>
+    <td>String</td>
+    <td>See: http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size</td>
+    <td><tt></tt></td>
+  </tr>
+  <tr>
     <td><tt>['passenger-nginx']['passenger']['apps'][n]['custom_config']</tt></td>
     <td>String</td>
     <td>Any additional Nginx configuration that you want for the app.</td>
@@ -407,6 +419,8 @@ Include `passenger-nginx` in your node's `run_list`:
 
 
 ## Changelog
+
+**17 November 2014 - 0.9.10** - Added options for `client_max_body_size` and `client_body_buffer_size`
 
 **17 November 2014 - 0.9.9** - Made Gzip static default
 
