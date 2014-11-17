@@ -37,6 +37,7 @@ server {
 
   client_max_body_size 5m;
   client_body_buffer_size 128k;
+  gzip_static on;
 
   <% if @ssl_certificate %>
   ssl                  on;

@@ -30,11 +30,7 @@ http {
   <% end %>
 
   sendfile        on;
-  #tcp_nopush     on;
-
   keepalive_timeout  65;
-
-  #gzip  on;
 
   # Include virtual host configs
   include sites-enabled/*;
