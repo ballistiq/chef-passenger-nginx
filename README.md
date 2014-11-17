@@ -408,6 +408,8 @@ Include `passenger-nginx` in your node's `run_list`:
 
 ## Changelog
 
+**17 November 2014 - 0.9.9** - Made Gzip static default
+
 **17 November 2014 - 0.9.8** - Fixed bug with no extra configure flags causing script to barf.
 
 **14 November 2014 - 0.9.7** - Added Nginx extra configure flags to attributes.
