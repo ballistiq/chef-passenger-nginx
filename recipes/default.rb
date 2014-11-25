@@ -158,6 +158,14 @@ node['passenger-nginx']['apps'].each do |app|
     source "nginx_app.conf.erb"
     mode 0744
     action :create
+
+    # Read custom config
+    custom_config = if app['custom_config'] && app['custom_config'].kind_of?(Array)
+      app['custom_config'].join "\n"
+    else
+      app['custom_config']
+    end
+
     variables(
       listen: app['listen'] || 80,
       server_name: app['server_name'] || "localhost",
@@ -174,7 +182,7 @@ node['passenger-nginx']['apps'].each do |app|
       passenger_thread_count: app['passenger_thread_count'] || nil,
       access_log: app['access_log'] || nil,
       error_log: app['error_log'] || nil,
-      custom_config: app['custom_config'] || nil,
+      custom_config: custom_config || nil,
       client_max_body_size: app['client_max_body_size'] || nil,
       client_body_buffer_size: app['client_body_buffer_size'] || nil
     )

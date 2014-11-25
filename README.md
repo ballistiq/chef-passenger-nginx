@@ -233,9 +233,19 @@ If you are configuring an application that has some funky requirements and need 
   </tr>
   <tr>
     <td><tt>['passenger-nginx']['passenger']['apps'][n]['custom_config']</tt></td>
-    <td>String</td>
+    <td>String or Array</td>
     <td>Any additional Nginx configuration that you want for the app.</td>
-    <td><tt></tt></td>
+    <td><tt>
+E.g.
+
+```
+"custom_config": [
+  "expires max;",
+  "location ~* \\.(eot|ttf|woff)$ {",
+  "  add_header Access-Control-Allow-Origin *;",
+  "}"
+```
+    </tt></td>
   </tr>
 
   <tr>
@@ -417,8 +427,9 @@ Include `passenger-nginx` in your node's `run_list`:
 }
 ```
 
-
 ## Changelog
+
+**25 November 2014 - 0.9.11** - Custom configs can now be passed in an array, for longer custom configurations.
 
 **17 November 2014 - 0.9.10** - Added options for `client_max_body_size` and `client_body_buffer_size`
 
