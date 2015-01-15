@@ -429,6 +429,8 @@ Include `passenger-nginx` in your node's `run_list`:
 
 ## Changelog
 
+**15 January 2015 - 0.9.13** - Added internal monitoring.
+
 **4 December 2014 - 0.9.12** - Added PCRE packages to installation to ensure that Nginx installation has a clean run.
 
 **25 November 2014 - 0.9.11** - Custom configs can now be passed in an array, for longer custom configurations.
