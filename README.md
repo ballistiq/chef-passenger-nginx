@@ -149,7 +149,7 @@ If you are configuring an application that has some funky requirements and need 
     <td><tt>['passenger-nginx']['passenger']['apps'][n]['server_name']</tt></td>
     <td>String</td>
     <td>Name-based virtual hosting: "example.com www.example.com"</td>
-    <td><tt></tt></td>
+    <td><tt>nil</tt></td>
   </tr>
   <tr>
     <td><tt>['passenger-nginx']['passenger']['apps'][n]['listen']</tt></td>
@@ -428,6 +428,8 @@ Include `passenger-nginx` in your node's `run_list`:
 ```
 
 ## Changelog
+
+**16 February 2015 - 0.9.14** - Made server_name var optional.
 
 **15 January 2015 - 0.9.13** - Added internal monitoring.
 

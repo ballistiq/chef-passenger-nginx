@@ -168,7 +168,7 @@ node['passenger-nginx']['apps'].each do |app|
 
     variables(
       listen: app['listen'] || 80,
-      server_name: app['server_name'] || "localhost",
+      server_name: app['server_name'] || nil,
       root: app['root'] || "/opt/nginx/html",
       ssl_certificate: app['ssl_certificate'] || nil,
       ssl_certificate_key: app['ssl_certificate_key'] || nil,

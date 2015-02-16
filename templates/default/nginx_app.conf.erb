@@ -1,6 +1,8 @@
 server {
   listen <%= @listen %>;
+  <% if @server_name %>
   server_name <%= @server_name %>;
+  <% end %>
   root <%= @root %>;
   passenger_enabled on;
   <% if @ruby_gemset %>
