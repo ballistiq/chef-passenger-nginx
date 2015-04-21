@@ -153,11 +153,22 @@ end
 
 # Add any applications that we need
 node['passenger-nginx']['apps'].each do |app|
-  # Create the conf
+
   template "/opt/nginx/conf/sites-available/#{app[:name]}" do
-    source "nginx_app.conf.erb"
     mode 0744
     action :create
+
+    # Create the conf
+    if app[:config_source]
+      source app[:config_source]
+    else
+      source "nginx_app.conf.erb"
+    end
+
+    # If we are completely overriding the cookbook, use this:
+    if app[:config_cookbook]
+      cookbook app[:config_cookbook]
+    end
 
     # Read custom config
     custom_config = if app['custom_config'] && app['custom_config'].kind_of?(Array)

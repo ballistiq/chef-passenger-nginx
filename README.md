@@ -140,6 +140,18 @@ If you are configuring an application that has some funky requirements and need 
     <td><tt>[]</tt></td>
   </tr>
   <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['config_source']</tt></td>
+    <td>String</td>
+    <td>Override the source of the config file. Used for completely custom configs. E.g. app1.conf.erb</td>
+    <td><tt>nginx_app.conf.erb</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['config_cookbook']</tt></td>
+    <td>String</td>
+    <td>Override the cookbook of your custom config.</td>
+    <td><tt></tt></td>
+  </tr>
+  <tr>
     <td><tt>['passenger-nginx']['passenger']['apps'][n]['name']</tt></td>
     <td>String</td>
     <td>name-of-your-application-like-this</td>
