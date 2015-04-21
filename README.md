@@ -441,6 +441,8 @@ Include `passenger-nginx` in your node's `run_list`:
 
 ## Changelog
 
+**21 April 2015 - 0.9.15** - Enabled totally custom config files.
+
 **16 February 2015 - 0.9.14** - Made server_name var optional.
 
 **15 January 2015 - 0.9.13** - Added internal monitoring.
