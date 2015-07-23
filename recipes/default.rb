@@ -30,7 +30,7 @@ end
 
 # Install basic packages
 %w(git build-essential curl libcurl4-openssl-dev libpcre3 libpcre3-dev).each do |pkg|
-  apt_package pkg  
+  apt_package pkg
 end
 
 execute "Installing GPG keys so that RVM won't barf on installation" do
@@ -179,6 +179,7 @@ node['passenger-nginx']['apps'].each do |app|
 
     variables(
       listen: app['listen'] || 80,
+      listen_redirect: app['listen_redirect'] || 80,
       server_name: app['server_name'] || nil,
       root: app['root'] || "/opt/nginx/html",
       ssl_certificate: app['ssl_certificate'] || nil,

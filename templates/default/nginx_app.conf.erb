@@ -1,5 +1,5 @@
 server {
-  listen <%= @listen %> <%= 'ssl' if  @redirect_http_https %>;
+  listen <%= @listen %> <%= 'ssl' if @redirect_http_https %>;
   <% if @server_name %>
   server_name <%= @server_name %>;
   <% end %>
@@ -72,7 +72,7 @@ server {
 
 <% if @redirect_http_https %>
 server {
-  listen 80;
+  listen <%= @listen_redirect %>;
   server_name <%= @server_name %>;
   return 301 https://$server_name$request_uri;
 }
