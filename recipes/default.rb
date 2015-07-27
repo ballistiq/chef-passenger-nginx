@@ -22,15 +22,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+if platform_family?('debian')
+  execute "apt-get update" do
+    command "apt-get update"
+    user "root"
+  end
 
-execute "apt-get update" do
-  command "apt-get update"
-  user "root"
-end
-
-# Install basic packages
-%w(git build-essential curl libcurl4-openssl-dev libpcre3 libpcre3-dev).each do |pkg|
-  apt_package pkg  
+  # Install basic packages
+  apt_package %w(git build-essential curl libcurl4-openssl-dev libpcre3 libpcre3-dev)
+elsif platform_family?('rhel')
+  # RHEL prereqs
+   yum_package %w(epel-release git curl libcurl libcurl-devel pcre pcre-devel)
 end
 
 execute "Installing GPG keys so that RVM won't barf on installation" do
@@ -52,18 +54,23 @@ execute "Add deploy user to RVM" do
   user "root"
 end
 
+# Install RVM requirements
+execute "Install RVM requirements" do
+  command "source #{node['passenger-nginx']['rvm']['rvm_shell']} && rvm requirements"
+  user "root"
+end
+
 # Install Ruby
 bash "Install Ruby" do
-  code "source /etc/profile.d/rvm.sh && rvm install #{node['passenger-nginx']['ruby_version']}"
+  code "source #{node['passenger-nginx']['rvm']['rvm_shell']} && rvm install #{node['passenger-nginx']['ruby_version']}"
   user "root"
   not_if { Dir.exists? "/usr/local/rvm/rubies/ruby-#{node['passenger-nginx']['ruby_version']}" }
 end
 
 # Set default Ruby
 bash "Set default Ruby" do
-  code "source /etc/profile.d/rvm.sh && rvm --default use #{node['passenger-nginx']['ruby_version']}"
+  code "source #{node['passenger-nginx']['rvm']['rvm_shell']} && rvm --default use #{node['passenger-nginx']['ruby_version']}"
 end
-
 
 # Check for if we are installing Passenger Enterprise
 passenger_enterprise = !!node['passenger-nginx']['passenger']['enterprise_download_token']
@@ -121,10 +128,18 @@ template "/opt/nginx/conf/nginx.conf" do
 end
 
 # Install the nginx control script
-cookbook_file "/etc/init.d/nginx" do
-  source "nginx.initd"
-  action :create
-  mode 0755
+if platform_family?('debian')
+  cookbook_file "/etc/init.d/nginx" do
+    source "nginx.initd.debian"
+    action :create
+    mode 0755
+  end
+elsif platform_family?('rhel')
+  cookbook_file "/etc/init.d/nginx" do
+    source "nginx.initd.rhel"
+    action :create
+    mode 0755
+  end
 end
 
 # Add log rotation
