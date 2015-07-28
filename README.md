@@ -5,6 +5,7 @@ Chef cookbook for provisioning Ruby (RVM), Passenger (Open Source and Enterprise
 ## Supported Platforms
 
 * Ubuntu
+* RHEL (Redhat, Oracle, Centos, Scientific)
 
 ## Quick Start Guide
 
@@ -99,7 +100,7 @@ Now you can run your Capistrano scripts to deploy to the server and off you go.
 
 ## Need to make changes to the cookbook?
 
-If you are configuring an application that has some funky requirements and need to change some stuff in this cookbook, clone the repository and copy it to `site-cookbooks`. Remove it from the Berksfile as you are now using the version in your project. Make any edits and enjoy. 
+If you are configuring an application that has some funky requirements and need to change some stuff in this cookbook, clone the repository and copy it to `site-cookbooks`. Remove it from the Berksfile as you are now using the version in your project. Make any edits and enjoy.
 
 
 ## Important Attributes
