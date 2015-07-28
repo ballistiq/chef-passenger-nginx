@@ -7,3 +7,7 @@ long_description 'Installs/Configures RVM, Ruby, Phusion Passenger (open source 
 version          '0.9.15'
 
 supports 'ubuntu'
+
+%w{ redhat centos scientific oracle }.each do |rhel|
+  supports rhel, ">= 6.0"
+end
