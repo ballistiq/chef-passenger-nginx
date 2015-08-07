@@ -22,6 +22,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+node['passenger-nginx']['ruby_version'].prepend('ruby-') if node['passenger-nginx']['ruby_version'] =~ /^\d/
+
 if platform_family?('debian')
   execute "apt-get update" do
     command "apt-get update"
@@ -32,7 +34,7 @@ if platform_family?('debian')
   apt_package %w(git build-essential curl libcurl4-openssl-dev libpcre3 libpcre3-dev)
 elsif platform_family?('rhel')
   # RHEL prereqs
-   yum_package %w(epel-release git curl libcurl libcurl-devel pcre pcre-devel)
+   yum_package %w(git curl libcurl libcurl-devel pcre pcre-devel)
 end
 
 execute "Installing GPG keys so that RVM won't barf on installation" do
@@ -49,14 +51,20 @@ execute "Installing RVM and Ruby" do
 end
 
 # Add deploy user to rvm
-execute "Add deploy user to RVM" do
-  command "usermod -a -G rvm #{node['passenger-nginx']['nginx']['user']}"
-  user "root"
+user node['passenger-nginx']['nginx']['user'] do
+  supports :manage_home => false
+  shell "/sbin/nologin"
+end
+
+# Add nginx user to rvm group
+group "rvm" do
+  append true
+  members node['passenger-nginx']['nginx']['user']
 end
 
 # Install RVM requirements
-execute "Install RVM requirements" do
-  command "source #{node['passenger-nginx']['rvm']['rvm_shell']} && rvm requirements"
+bash "Install RVM requirements" do
+  code "source #{node['passenger-nginx']['rvm']['rvm_shell']} && rvm requirements"
   user "root"
 end
 
@@ -64,12 +72,13 @@ end
 bash "Install Ruby" do
   code "source #{node['passenger-nginx']['rvm']['rvm_shell']} && rvm install #{node['passenger-nginx']['ruby_version']}"
   user "root"
-  not_if { Dir.exists? "/usr/local/rvm/rubies/ruby-#{node['passenger-nginx']['ruby_version']}" }
+  not_if { Dir.exists? "/usr/local/rvm/rubies/#{node['passenger-nginx']['ruby_version']}" }
 end
 
 # Set default Ruby
 bash "Set default Ruby" do
   code "source #{node['passenger-nginx']['rvm']['rvm_shell']} && rvm --default use #{node['passenger-nginx']['ruby_version']}"
+  not_if { `bash -c "rvm list default string 2>/dev/null"`.strip.eql?(node['passenger-nginx']['ruby_version']) }
 end
 
 # Check for if we are installing Passenger Enterprise
@@ -77,26 +86,18 @@ passenger_enterprise = !!node['passenger-nginx']['passenger']['enterprise_downlo
 
 if passenger_enterprise
   bash "Installing Passenger Enterprise Edition" do
-    code <<-EOF
-    source #{node['passenger-nginx']['rvm']['rvm_shell']}
-    gem install --source https://download:#{node['passenger-nginx']['passenger']['enterprise_download_token']}@www.phusionpassenger.com/enterprise_gems/ passenger-enterprise-server -v #{node['passenger-nginx']['passenger']['version']}
-    EOF
+   code "rvm #{node['passenger-nginx']['ruby_version']} do gem install --source https://download:#{node['passenger-nginx']['passenger']['enterprise_download_token']}@www.phusionpassenger.com/enterprise_gems/ passenger-enterprise-server -v #{node['passenger-nginx']['passenger']['version']}"
     user "root"
 
-    regex = Regexp.escape("passenger-enterprise-server (#{node['passenger-nginx']['passenger']['version']})")
-    not_if { `bash -c "source #{node['passenger-nginx']['rvm']['rvm_shell']} && gem list"`.lines.grep(/^#{regex}/).count > 0 }
+    not_if { `bash -c "rvm-exec #{node['passenger-nginx']['ruby_version']} gem list -i passenger-enterprise-server -v #{node['passenger-nginx']['passenger']['version']} 2>/dev/null"` }
   end
 else
   # Install Passenger open source
   bash "Installing Passenger Open Source Edition" do
-    code <<-EOF
-    source #{node['passenger-nginx']['rvm']['rvm_shell']}
-    gem install passenger -v #{node['passenger-nginx']['passenger']['version']}
-    EOF
+    code "rvm #{node['passenger-nginx']['ruby_version']} do gem install passenger -v #{node['passenger-nginx']['passenger']['version']} --source https://rubygems.org"
     user "root"
 
-    regex = Regexp.escape("passenger (#{node['passenger-nginx']['passenger']['version']})")
-    not_if { `bash -c "source #{node['passenger-nginx']['rvm']['rvm_shell']} && gem list"`.lines.grep(/^#{regex}/).count > 0 }
+    not_if { `bash -c "rvm-exec #{node['passenger-nginx']['ruby_version']} gem list -i passenger -v #{node['passenger-nginx']['passenger']['version']} 2>/dev/null"` }
   end
 end
 
@@ -111,9 +112,9 @@ end
 
 # Create the config
 if passenger_enterprise
-  passenger_root = "/usr/local/rvm/gems/ruby-#{node['passenger-nginx']['ruby_version']}/gems/passenger-enterprise-server-#{node['passenger-nginx']['passenger']['version']}"
+  passenger_root = "/usr/local/rvm/gems/#{node['passenger-nginx']['ruby_version']}/gems/passenger-enterprise-server-#{node['passenger-nginx']['passenger']['version']}"
 else
-  passenger_root = "/usr/local/rvm/gems/ruby-#{node['passenger-nginx']['ruby_version']}/gems/passenger-#{node['passenger-nginx']['passenger']['version']}"
+  passenger_root = "/usr/local/rvm/gems/#{node['passenger-nginx']['ruby_version']}/gems/passenger-#{node['passenger-nginx']['passenger']['version']}"
 end
 
 template "/opt/nginx/conf/nginx.conf" do
@@ -158,12 +159,6 @@ directory "/opt/nginx/conf/sites-available" do
   mode 0755
   action :create
   not_if { File.directory? "/opt/nginx/conf/sites-available" }
-end
-
-# Set up service to run by default
-service 'nginx' do
-  supports :status => true, :restart => true, :reload => true
-  action [ :enable ]
 end
 
 # Add any applications that we need
@@ -224,21 +219,22 @@ node['passenger-nginx']['apps'].each do |app|
     bash "Create Ruby Gemset" do
       code <<-EOF
       source #{node['passenger-nginx']['rvm']['rvm_shell']}
-      rvm ruby-#{node['passenger-nginx']['ruby_version']} do rvm gemset create #{app['ruby_gemset']}
+      rvm #{node['passenger-nginx']['ruby_version']} do rvm gemset create #{app['ruby_gemset']}
       EOF
       user "root"
-      not_if { File.directory? "/usr/local/rvm/gems/ruby-#{node['passenger-nginx']['ruby_version']}@#{app['ruby_gemset']}" }
+      not_if { File.directory? "/usr/local/rvm/gems/#{node['passenger-nginx']['ruby_version']}@#{app['ruby_gemset']}" }
     end
   end
 end
 
-# Restart/start nginx
-service "nginx" do
-  action :restart
-  only_if { File.exists? "/opt/nginx/logs/nginx.pid" }
+# Set up service to run by default
+service 'nginx' do
+  supports :status => true, :restart => true, :reload => true
+  action [ :enable ]
 end
 
+# Restart(start) nginx
 service "nginx" do
-  action :start
-  not_if { File.exists? "/opt/nginx/logs/nginx.pid" }
+  action :restart 
 end
+
