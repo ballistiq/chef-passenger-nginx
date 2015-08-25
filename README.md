@@ -99,7 +99,7 @@ Now you can run your Capistrano scripts to deploy to the server and off you go.
 
 ## Need to make changes to the cookbook?
 
-If you are configuring an application that has some funky requirements and need to change some stuff in this cookbook, clone the repository and copy it to `site-cookbooks`. Remove it from the Berksfile as you are now using the version in your project. Make any edits and enjoy. 
+If you are configuring an application that has some funky requirements and need to change some stuff in this cookbook, clone the repository and copy it to `site-cookbooks`. Remove it from the Berksfile as you are now using the version in your project. Make any edits and enjoy.
 
 
 ## Important Attributes
@@ -167,6 +167,12 @@ If you are configuring an application that has some funky requirements and need 
     <td><tt>['passenger-nginx']['passenger']['apps'][n]['listen']</tt></td>
     <td>Integer</td>
     <td>What port to listen to: e.g. 80</td>
+    <td><tt></tt></td>
+  </tr>
+  <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['listen_redirect']</tt></td>
+    <td>Integer</td>
+    <td>What port to listen to for http to https redirects: e.g. 8080</td>
     <td><tt></tt></td>
   </tr>
   <tr>
