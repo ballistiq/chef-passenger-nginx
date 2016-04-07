@@ -46,6 +46,7 @@ server {
   <% end %>
 
   gzip_static on;
+  gzip_http_version 1.0;
 
   <% if @ssl_certificate %>
   ssl                  on;
