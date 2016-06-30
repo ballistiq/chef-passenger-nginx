@@ -447,6 +447,8 @@ Include `passenger-nginx` in your node's `run_list`:
 
 ## Changelog
 
+**29 June 2016 - 0.9.17** - Updated init.d script with hashbang so that it will work on newer Ubuntu release.
+
 **25 August 2015 - 0.9.16** - Merged changes by @jh125486 adding ability to listen to different ports, and changed redirect from rewrite regex to return 301.
 
 **21 April 2015 - 0.9.15** - Enabled totally custom config files.
