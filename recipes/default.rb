@@ -185,7 +185,7 @@ node['passenger-nginx']['apps'].each do |app|
       ssl_certificate: app['ssl_certificate'] || nil,
       ssl_certificate_key: app['ssl_certificate_key'] || nil,
       redirect_http_https: app['redirect_http_https'] || false,
-      ruby_version: node['passenger-nginx']['ruby_version'] || nil,
+      ruby_version: app['ruby_version'] || node['passenger-nginx']['ruby_version'] || nil,
       ruby_gemset: app['ruby_gemset'] || nil,
       app_env: app['app_env'] || nil,
       passenger_min_instances: app['passenger_min_instances'] || nil,
