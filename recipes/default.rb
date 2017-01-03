@@ -96,7 +96,7 @@ end
 bash "Installing passenger nginx module and nginx from source" do
   code <<-EOF
   source #{node['passenger-nginx']['rvm']['rvm_shell']}
-  passenger-install-nginx-module --auto --prefix=/opt/nginx --auto-download --extra-configure-flags="\"--with-http_gzip_static_module #{node['passenger-nginx']['nginx']['extra_configure_flags']}\""
+  passenger-install-nginx-module --auto --prefix=/opt/nginx --auto-download --extra-configure-flags="--with-http_gzip_static_module #{node['passenger-nginx']['nginx']['http2'] ? "--with-http_v2_module" : ""} #{node['passenger-nginx']['nginx']['extra_configure_flags']}"
   EOF
   user "root"
   not_if { File.exists? "/opt/nginx/sbin/nginx" }
@@ -185,6 +185,7 @@ node['passenger-nginx']['apps'].each do |app|
       ssl_certificate: app['ssl_certificate'] || nil,
       ssl_certificate_key: app['ssl_certificate_key'] || nil,
       redirect_http_https: app['redirect_http_https'] || false,
+      http2: app['http2'] || false,
       ruby_version: app['ruby_version'] || node['passenger-nginx']['ruby_version'] || nil,
       ruby_gemset: app['ruby_gemset'] || nil,
       app_env: app['app_env'] || nil,

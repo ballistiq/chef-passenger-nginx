@@ -8,6 +8,7 @@ default['passenger-nginx']['nginx']['worker_processes'] = 2
 default['passenger-nginx']['nginx']['user'] = 'www-data'
 default['passenger-nginx']['nginx']['access_log'] = 'logs/access.log'
 default['passenger-nginx']['nginx']['error_log'] = 'logs/error.log'
+default['passenger-nginx']['nginx']['http2'] = false
 
 # Passenger
 default['passenger-nginx']['passenger']['version'] = '4.0.53'

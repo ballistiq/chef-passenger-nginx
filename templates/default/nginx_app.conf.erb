@@ -1,5 +1,5 @@
 server {
-  listen <%= @listen %> <%= 'ssl' if @redirect_http_https %>;
+  listen <%= @listen %> <%= 'ssl' if @redirect_http_https %> <%= 'http2' if @http2 %>;
   <% if @server_name %>
   server_name <%= @server_name %>;
   <% end %>

@@ -170,6 +170,12 @@ If you are configuring an application that has some funky requirements and need 
     <td><tt></tt></td>
   </tr>
   <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['http2']</tt></td>
+    <td>Boolean</td>
+    <td>Use HTTP2</td>
+    <td><tt>false</tt></td>
+  </tr>
+  <tr>
     <td><tt>['passenger-nginx']['passenger']['apps'][n]['listen_redirect']</tt></td>
     <td>Integer</td>
     <td>What port to listen to for http to https redirects: e.g. 8080</td>
@@ -287,6 +293,12 @@ E.g.
     <td>String</td>
     <td>User to run Nginx as</td>
     <td><tt>www-data</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['passenger-nginx']['nginx']['http2']</tt></td>
+    <td>Boolean</td>
+    <td>Add HTTP2 module</td>
+    <td><tt>false</tt></td>
   </tr>
   <tr>
     <td><tt>['passenger-nginx']['nginx']['extra_configure_flags']</tt></td>
@@ -446,6 +458,8 @@ Include `passenger-nginx` in your node's `run_list`:
 ```
 
 ## Changelog
+
+**2 January 2017 - 0.9.18** - Added support for HTTP2, which was added in Nginx 1.9.5+.
 
 **29 June 2016 - 0.9.17** - Updated init.d script with hashbang so that it will work on newer Ubuntu release.
 
