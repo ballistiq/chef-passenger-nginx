@@ -55,9 +55,9 @@ server {
 
   ssl_session_timeout  5m;
 
-  ssl_protocols  SSLv2 TLSv1;
-  ssl_ciphers  HIGH:!aNULL:!MD5;
-  ssl_prefer_server_ciphers   on;
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+  ssl_ciphers EECDH+CHACHA20:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;
+  ssl_prefer_server_ciphers on;
   <% end %>
 
   # Maintenance Page
