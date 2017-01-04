@@ -72,7 +72,7 @@ if passenger_enterprise
   bash "Installing Passenger Enterprise Edition" do
     code <<-EOF
     source #{node['passenger-nginx']['rvm']['rvm_shell']}
-    gem install --source https://download:#{node['passenger-nginx']['passenger']['enterprise_download_token']}@www.phusionpassenger.com/enterprise_gems/ passenger-enterprise-server -v #{node['passenger-nginx']['passenger']['version']}
+    gem install --source https://download:#{node['passenger-nginx']['passenger']['enterprise_download_token']}@www.phusionpassenger.com/enterprise_gems/ passenger-enterprise-server -v #{node['passenger-nginx']['passenger']['version']} --no-ri --no-rdoc
     EOF
     user "root"
 
@@ -84,7 +84,7 @@ else
   bash "Installing Passenger Open Source Edition" do
     code <<-EOF
     source #{node['passenger-nginx']['rvm']['rvm_shell']}
-    gem install passenger -v #{node['passenger-nginx']['passenger']['version']}
+    gem install passenger -v #{node['passenger-nginx']['passenger']['version']} --no-ri --no-rdoc
     EOF
     user "root"
 
