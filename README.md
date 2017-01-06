@@ -313,6 +313,12 @@ E.g.
     <td><tt>2</tt></td>
   </tr>
   <tr>
+    <td><tt>['passenger-nginx']['nginx']['worker_connections']</tt></td>
+    <td>Integer</td>
+    <td>Number of connections each worker can handle</td>
+    <td><tt>1024</tt></td>
+  </tr>
+  <tr>
     <td><tt>['passenger-nginx']['nginx']['worker_rlimit_nofile']</tt></td>
     <td>Integer</td>
     <td>Number of files Nginx can open. Should be quite high for a high performance system.</td>
