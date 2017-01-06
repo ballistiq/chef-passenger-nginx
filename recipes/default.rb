@@ -34,7 +34,8 @@ end
 end
 
 execute "Installing GPG keys so that RVM won't barf on installation" do
-  command "gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3"
+  # command "gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3"
+  command "curl -sSL https://rvm.io/mpapis.asc | sudo gpg --import -"
   user "root"
   not_if { File.exists? "/usr/local/rvm/bin/rvm" }
 end
