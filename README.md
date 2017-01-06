@@ -313,6 +313,12 @@ E.g.
     <td><tt>2</tt></td>
   </tr>
   <tr>
+    <td><tt>['passenger-nginx']['nginx']['worker_rlimit_nofile']</tt></td>
+    <td>Integer</td>
+    <td>Number of files Nginx can open. Should be quite high for a high performance system.</td>
+    <td><tt>4096</tt></td>
+  </tr>
+  <tr>
     <td><tt>['passenger-nginx']['nginx']['access_log']</tt></td>
     <td>String</td>
     <td>Location for access log. "off" to not use this.</td>

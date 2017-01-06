@@ -1,5 +1,6 @@
 user  <%= @nginx['user'] %>;
 worker_processes  <%= @nginx['worker_processes'] %>;
+worker_rlimit_nofile  <%= @nginx['worker_rlimit_nofile'] %>;
 
 <% if @nginx['error_log'] %>
 error_log   <%= @nginx['error_log'] %>;
