@@ -115,13 +115,13 @@ If you are configuring an application that has some funky requirements and need 
     <td><tt>['passenger-nginx']['ruby_version']</tt></td>
     <td>String</td>
     <td>Numerical string of Ruby version</td>
-    <td><tt>2.1.0</tt></td>
+    <td><tt>2.3.3</tt></td>
   </tr>
   <tr>
     <td><tt>['passenger-nginx']['passenger']['version']</tt></td>
     <td>String</td>
     <td>Passenger Gem Version</td>
-    <td><tt>4.0.53</tt></td>
+    <td><tt>4.1.1</tt></td>
   </tr>
   <tr>
     <td><tt>['passenger-nginx']['passenger']['enterprise_download_token']</tt></td>
