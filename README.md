@@ -271,7 +271,12 @@ E.g.
 ```
     </tt></td>
   </tr>
-
+  <tr>
+    <td><tt>['passenger-nginx']['passenger']['apps'][n]['gzip_static']</tt></td>
+    <td>Boolean</td>
+    <td>Turn on gzip_static - delivers gz file if it exists</td>
+    <td><tt>false</tt></td>
+  </tr>
   <tr>
     <td><tt>['passenger-nginx']['passenger']['apps'][n]['access_log']</tt></td>
     <td>String</td>

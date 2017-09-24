@@ -198,7 +198,8 @@ node['passenger-nginx']['apps'].each do |app|
       error_log: app['error_log'] || nil,
       custom_config: custom_config || nil,
       client_max_body_size: app['client_max_body_size'] || nil,
-      client_body_buffer_size: app['client_body_buffer_size'] || nil
+      client_body_buffer_size: app['client_body_buffer_size'] || nil,
+      gzip_static: app['gzip_static'] || false
     )
   end
 
