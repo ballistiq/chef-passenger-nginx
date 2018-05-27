@@ -2,7 +2,11 @@
 
 Chef cookbook for provisioning Ruby (RVM), Passenger (Open Source and Enterprise editions) and Nginx.
 
-## Supported Platforms
+## Warning - this is open-source, unsupported software
+
+Just a disclaimer that this script is unsupported. I created this specifically for my own projects and have open-sourced it because it may help others. If you have any problems with the software, note that I cannot help you. You are welcome to copy/fork the repo and fix the problem yourself.
+
+## Platforms
 
 * Ubuntu
 
