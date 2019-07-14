@@ -480,6 +480,8 @@ Include `passenger-nginx` in your node's `run_list`:
 
 ## Changelog
 
+**14 July 2019 - 0.9.20** - Updated to not barf on new RVM
+
 **2 January 2017 - 0.9.18** - Added support for HTTP2, which was added in Nginx 1.9.5+.
 
 **29 June 2016 - 0.9.17** - Updated init.d script with hashbang so that it will work on newer Ubuntu release.

@@ -32,6 +32,7 @@ http {
 
   sendfile        on;
   keepalive_timeout  65;
+  keepalive_requests 100000;
   server_tokens off;
 
   # Monitoring
